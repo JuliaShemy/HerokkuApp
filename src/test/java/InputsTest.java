@@ -11,6 +11,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
 import java.time.Duration;
 
 public class InputsTest {
@@ -23,34 +25,34 @@ public class InputsTest {
         options.addArguments("--disable-notifications");
         //определяем браузер
         WebDriver driver = new ChromeDriver(options);
-
+        SoftAssert softAssert = new SoftAssert();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         //открывает страницу по url
         driver.get("https://the-internet.herokuapp.com/inputs");
-
         WebElement input = driver.findElement(By.tagName("input"));
         // вводим буквы
-        input.sendKeys("e");
+        input.sendKeys("abc");
         String valueLetters = input.getAttribute("value");
         System.out.println("Значение поля после ввода букв: " + valueLetters);
-        Assert.assertEquals(valueLetters, "");//буквы не вводятся
-
+        softAssert.assertEquals(valueLetters, "");//буквы не вводятся
+        input.clear();//чистим строку
         //вводим цифры
         input.sendKeys("10");
         String valueNumbers = input.getAttribute("value");
         System.out.println("Значение поля после ввода цифр: " + valueNumbers);
-        Assert.assertEquals(valueNumbers, "10");//ввелось 10
+        softAssert.assertEquals(valueNumbers, "10");//ввелось 10
         //увеличение
         input.sendKeys(Keys.ARROW_UP);
         String valueUp = input.getAttribute("value");
         System.out.println("Значение поля после увеличения: " + valueUp);
-        Assert.assertEquals(valueUp, "11");
+        softAssert.assertEquals(valueUp, "11");
         //уменьшение
         input.sendKeys(Keys.ARROW_DOWN);
         String valueDown = input.getAttribute("value");
         System.out.println("Значение поля после уменьшения: " + valueDown);
-        Assert.assertEquals(valueDown, "10");
+        softAssert.assertEquals(valueDown, "10");
 
+        softAssert.assertAll();
         driver.quit();
     }
 }
